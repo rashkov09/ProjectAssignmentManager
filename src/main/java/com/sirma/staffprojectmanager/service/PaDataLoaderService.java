@@ -3,11 +3,14 @@ package com.sirma.staffprojectmanager.service;
 import com.sirma.staffprojectmanager.accessor.FileAccessor;
 import com.sirma.staffprojectmanager.mapper.Mapper;
 import com.sirma.staffprojectmanager.model.ProjectAssignment;
+import com.sirma.staffprojectmanager.model.dto.ResultDto;
 import com.sirma.staffprojectmanager.repository.PaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PaDataLoaderService implements ApplicationRunner {
@@ -31,5 +34,9 @@ public class PaDataLoaderService implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		loadData();
+	}
+
+	public List<ResultDto> getOverlappingProjects() {
+		return paRepository.findOverlappingData();
 	}
 }
