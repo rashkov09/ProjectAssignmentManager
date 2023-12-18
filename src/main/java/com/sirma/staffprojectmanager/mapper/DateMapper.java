@@ -1,9 +1,6 @@
 package com.sirma.staffprojectmanager.mapper;
 
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
-@Component
 public class DateMapper implements Mapper<LocalDate> {
 	private final static String YEAR_FIRST_SLASH_PATTERN = "^([0-9]{4})\\/([0][1-9]|[1][0-2])\\/([0-2][0-9]|[3][0-1])$";
 	private final static String YEAR_LAST_SLASH_PATTERN = "^([0-2][0-9]|[3][0-1])\\/([0][1-9]|[1][0-2])\\/([0-9]{4})$";
