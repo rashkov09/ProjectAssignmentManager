@@ -1,7 +1,9 @@
 package com.sirma.staffprojectmanager.model;
 
+import javax.persistence.Entity;
 import java.time.LocalDate;
 
+@Entity
 public class ProjectAssignment extends BaseEntity{
 	private Long employeeId;
 	private Long projectId;
@@ -13,6 +15,10 @@ public class ProjectAssignment extends BaseEntity{
 		this.projectId = projectId;
 		this.dateFrom = dateFrom;
 		this.dateTo = dateTo;
+	}
+
+	public ProjectAssignment() {
+
 	}
 
 	public Long getEmployeeId() {
