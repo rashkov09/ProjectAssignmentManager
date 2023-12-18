@@ -1,5 +1,7 @@
 package com.sirma.staffprojectmanager.configuration;
 
+import com.sirma.staffprojectmanager.accessor.CSVAccessor;
+import com.sirma.staffprojectmanager.accessor.FileAccessor;
 import com.sirma.staffprojectmanager.mapper.DateMapper;
 import com.sirma.staffprojectmanager.mapper.Mapper;
 import com.sirma.staffprojectmanager.mapper.ProjectAssignmentMapper;
@@ -13,11 +15,18 @@ import java.time.LocalDate;
 public class ApplicationBeanConfiguration {
 
 	@Bean
-	public Mapper<LocalDate> dateMapper(){
+	public Mapper<LocalDate> dateMapper() {
 		return new DateMapper();
 	}
-		@Bean
-	public Mapper<ProjectAssignment> projectAssignmentMapper(){
+
+	@Bean
+	public Mapper<ProjectAssignment> projectAssignmentMapper() {
 		return new ProjectAssignmentMapper(dateMapper());
 	}
+
+	@Bean
+	public FileAccessor CSVAccessor() {
+		return new CSVAccessor();
+	}
+
 }

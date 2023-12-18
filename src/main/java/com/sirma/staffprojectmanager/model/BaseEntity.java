@@ -1,9 +1,11 @@
 package com.sirma.staffprojectmanager.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @MappedSuperclass
 public class BaseEntity {
@@ -16,8 +18,10 @@ public class BaseEntity {
 
 	public BaseEntity() {
 	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(nullable = false)
 	public Long getId() {
 		return id;
 	}

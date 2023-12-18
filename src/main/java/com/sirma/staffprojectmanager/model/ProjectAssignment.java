@@ -1,10 +1,16 @@
 package com.sirma.staffprojectmanager.model;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.time.LocalDate;
 
 @Entity
-public class ProjectAssignment extends BaseEntity{
+public class ProjectAssignment extends BaseEntity {
+
 	private Long employeeId;
 	private Long projectId;
 	private LocalDate dateFrom;

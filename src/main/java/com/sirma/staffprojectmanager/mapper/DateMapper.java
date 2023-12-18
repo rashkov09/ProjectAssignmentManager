@@ -6,9 +6,9 @@ public class DateMapper implements Mapper<LocalDate> {
 	private final static String YEAR_LAST_SLASH_PATTERN = "^([0-2][0-9]|[3][0-1])\\/([0][1-9]|[1][0-2])\\/([0-9]{4})$";
 	private final static String YEAR_LAST_MONTH_FIRST_SLASH_PATTERN = "^([0][1-9]|[1][0-2])\\/([0-2][0-9]|[3][0-1])\\/(\\d{4})$";
 
-	private final static String YEAR_FIRST_DASH_PATTERN = "^([0-9]{4})\\/([0][1-9]|[1][0-2])\\/([0-2][0-9]|[3][0-1])$";
-	private final static String YEAR_LAST_DASH_PATTERN = "^([0-2][0-9]|[3][0-1])\\/([0][1-9]|[1][0-2])\\/([0-9]{4})$";
-	private final static String YEAR_LAST_MONTH_FIRST_DASH_PATTERN = "^([0][1-9]|[1][0-2])\\/([0-2][0-9]|[3][0-1])\\/(\\d{4})$";
+	private final static String YEAR_FIRST_DASH_PATTERN = "^([0-9]{4})-([0][1-9]|[1][0-2])-([0-2][0-9]|[3][0-1])$";
+	private final static String YEAR_LAST_DASH_PATTERN = "^([0-2][0-9]|[3][0-1])-([0][1-9]|[1][0-2])-([0-9]{4})$";
+	private final static String YEAR_LAST_MONTH_FIRST_DASH_PATTERN = "^([0][1-9]|[1][0-2])-([0-2][0-9]|[3][0-1])-(\\d{4})$";
 
 	/**
 	 * This class will support the following formats:

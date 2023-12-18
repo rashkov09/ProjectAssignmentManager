@@ -19,7 +19,13 @@ public class ProjectAssignmentMapper implements Mapper<ProjectAssignment> {
 		Long projectId = Long.parseLong(data[1]);
 		LocalDate dateFrom = dateMapper.mapFromString(data[2]);
 		LocalDate dateTo = dateMapper.mapFromString(data[3]);
-		return new ProjectAssignment(employeeId, projectId, dateFrom, dateTo);
+		ProjectAssignment projectAssignment = new ProjectAssignment();
+		projectAssignment.setEmployeeId(employeeId);
+		projectAssignment.setProjectId(projectId);
+		projectAssignment.setDateFrom(dateFrom);
+		projectAssignment.setDateTo(dateTo);
+
+		return projectAssignment;
 	}
 
 	@Override
