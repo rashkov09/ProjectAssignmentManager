@@ -28,7 +28,9 @@ public class PaDataLoaderService implements ApplicationRunner {
 	}
 
 	private void loadData(){
-		CSVAccessor.read().stream().map(projectAssignmentMapper::mapFromString).forEach(paRepository::save);
+		if (paRepository.findAll().isEmpty()) {
+			CSVAccessor.read().stream().map(projectAssignmentMapper::mapFromString).forEach(paRepository::save);
+		}
 	}
 
 	@Override
