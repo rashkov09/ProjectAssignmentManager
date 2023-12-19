@@ -1,16 +1,16 @@
 package com.sirma.staffprojectmanager.model.dto;
 
-public class ResultDto {
+public class OverlapProjectsDto {
 	private Long emp1;
 	private Long emp2;
 	private Long projectId;
   private Integer overlapDays;
   private Integer totalDays;
 
-	public ResultDto() {
+	public OverlapProjectsDto() {
 	}
 
-	public ResultDto(Long emp1, Long emp2, Long projectId, Integer overlapDays, Integer totalDays) {
+	public OverlapProjectsDto(Long emp1, Long emp2, Long projectId, Integer overlapDays, Integer totalDays) {
 		this.emp1 = emp1;
 		this.emp2 = emp2;
 		this.projectId = projectId;

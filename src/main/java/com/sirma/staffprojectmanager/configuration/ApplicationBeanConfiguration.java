@@ -4,6 +4,7 @@ import com.sirma.staffprojectmanager.accessor.CSVAccessor;
 import com.sirma.staffprojectmanager.accessor.FileAccessor;
 import com.sirma.staffprojectmanager.mapper.DateMapper;
 import com.sirma.staffprojectmanager.mapper.Mapper;
+import com.sirma.staffprojectmanager.mapper.PaMapper;
 import com.sirma.staffprojectmanager.mapper.ProjectAssignmentMapper;
 import com.sirma.staffprojectmanager.model.ProjectAssignment;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,11 @@ public class ApplicationBeanConfiguration {
 	@Bean
 	public FileAccessor CSVAccessor() {
 		return new CSVAccessor();
+	}
+
+	@Bean
+	public PaMapper paMapper(){
+		return new PaMapper();
 	}
 
 }

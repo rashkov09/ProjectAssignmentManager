@@ -1,6 +1,6 @@
 package com.sirma.staffprojectmanager.model;
 
-import com.sirma.staffprojectmanager.model.dto.ResultDto;
+import com.sirma.staffprojectmanager.model.dto.OverlapProjectsDto;
 import jakarta.persistence.ColumnResult;
 import jakarta.persistence.ConstructorResult;
 import jakarta.persistence.Entity;
@@ -10,10 +10,10 @@ import jakarta.persistence.SqlResultSetMapping;
 import java.time.LocalDate;
 
 @SqlResultSetMapping(
-	name = "ResultDtoMapping",
+	name = "OverlapProjectsDtoMapping",
 	classes = {
 		@ConstructorResult(
-			targetClass = ResultDto.class,
+			targetClass = OverlapProjectsDto.class,
 			columns = {
 				@ColumnResult(name = "emp1", type = Long.class),
 				@ColumnResult(name = "emp2", type = Long.class),
@@ -61,7 +61,7 @@ LEFT JOIN\s
     ) AS project_durations ON overlap_data.project_id = project_durations.project_id;
 
 """,
-	resultSetMapping = "ResultDtoMapping"
+	resultSetMapping = "OverlapProjectsDtoMapping"
 )
 @Entity
 public class ProjectAssignment extends BaseEntity {
