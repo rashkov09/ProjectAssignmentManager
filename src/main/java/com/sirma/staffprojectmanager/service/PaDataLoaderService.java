@@ -45,8 +45,8 @@ public class PaDataLoaderService implements ApplicationRunner {
 		ResultDto resultDto= resultDtoList.stream().max(Comparator.comparing(ResultDto::getOverlapDays)).orElseThrow();
 		builder.append(resultDto);
 		builder.append(System.lineSeparator());
-		resultDtoList.stream().filter(result -> result.getEmp1().equals(resultDto.getEmp1()) && result.getEmp2().equals(resultDto.getEmp2()) && result.getProjectId().equals(resultDto.getProjectId())).forEach(project ->{
-			builder.append(project.getProjectId()).append(", ").append(project.getTotalDays()).append("\n");
+		resultDtoList.stream().filter(result -> result.getEmp1().equals(resultDto.getEmp1()) && result.getEmp2().equals(resultDto.getEmp2())).forEach(project ->{
+			builder.append("ProjectID: ").append(project.getProjectId()).append(", ").append("Total days: ").append(project.getTotalDays()).append("\n");
 		});
 		return builder.toString();
 	}

@@ -61,10 +61,8 @@ public class ResultDto {
 
 	@Override
 	public String toString() {
-		return "ResultDto{" +
-		       "emp1=" + emp1 +
+		return "emp1=" + emp1 +
 		       ", emp2=" + emp2 +
-		       ", overlapDays=" + overlapDays +
-		       '}';
+		       ", overlapDays=" + overlapDays;
 	}
 }

@@ -53,7 +53,7 @@ LEFT JOIN\s
     (
         SELECT\s
             p.project_id,
-          SUM(GREATEST(COALESCE(date_to, CURRENT_DATE), CURRENT_DATE) - LEAST(date_from, COALESCE(date_to, CURRENT_DATE))) AS total_days
+          MAX(COALESCE(p.date_to, CURRENT_DATE)) - MIN(p.date_from) AS total_days
         FROM\s
             project_assignment p
         GROUP BY\s
