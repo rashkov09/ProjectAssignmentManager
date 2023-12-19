@@ -35,7 +35,7 @@ public class PaController {
 	}
 
 	@GetMapping("/pa")
-	@Operation(summary = "Returns project assignments from database base ot filter. Return all if no filter applied.")
+	@Operation(summary = "Returns project assignments from database based on filter. Return all if no filter applied.")
 	public ResponseEntity<List<ProjectAssignmentDto>> getAllAssignments(
 		@RequestParam(value = "employeeId", required = false) Long employeeId,
 		@RequestParam(value = "projectId", required = false) Long projectId,
@@ -69,7 +69,7 @@ public class PaController {
 	@GetMapping("/findMaxProjectOverlap")
 	@Operation(
 		summary = "Returns a pair of employees who have worked together on common projects for the longest period of " +
-		          "time.")
+		          "time and the projects with the overlap time for each one.")
 	public ResponseEntity<String> getListOfOverlappingProjects() {
 		return ResponseEntity.ok(paDataLoaderService.getOverlappingProjects());
 	}
