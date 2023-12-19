@@ -1,8 +1,7 @@
 package com.sirma.staffprojectmanager.service;
 
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
 import com.sirma.staffprojectmanager.accessor.FileAccessor;
-import com.sirma.staffprojectmanager.exception.NoDataAvailableException;
+import com.sirma.staffprojectmanager.controller.requst.ProjectAssignmentRequest;
 import com.sirma.staffprojectmanager.mapper.Mapper;
 import com.sirma.staffprojectmanager.mapper.PaMapper;
 import com.sirma.staffprojectmanager.model.ProjectAssignment;
@@ -74,5 +73,13 @@ public class PaDataLoaderService implements ApplicationRunner {
 			return new ArrayList<>();
 		}
 		return paList.stream().map(paMapper::toDTO).collect(Collectors.toList());
+	}
+
+	public Long createProjectAssigment(ProjectAssignmentRequest projectAssignmentRequest) {
+		ProjectAssignment projectAssignment = new ProjectAssignment(projectAssignmentRequest.getEmployeeId(),
+		                                                            projectAssignmentRequest.getProjectId(),
+		                                                            projectAssignmentRequest.getDateFrom(),
+		                                                            projectAssignmentRequest.getDateTo());
+		return paRepository.save(projectAssignment).getId();
 	}
 }
