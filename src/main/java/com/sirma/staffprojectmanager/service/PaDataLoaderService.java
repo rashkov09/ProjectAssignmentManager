@@ -1,6 +1,5 @@
 package com.sirma.staffprojectmanager.service;
 
-import ch.qos.logback.classic.net.SimpleSSLSocketServer;
 import com.sirma.staffprojectmanager.accessor.FileAccessor;
 import com.sirma.staffprojectmanager.controller.requst.ProjectAssignmentRequest;
 import com.sirma.staffprojectmanager.mapper.Mapper;
@@ -9,17 +8,13 @@ import com.sirma.staffprojectmanager.model.ProjectAssignment;
 import com.sirma.staffprojectmanager.model.dto.OverlapProjectsDto;
 import com.sirma.staffprojectmanager.model.dto.ProjectAssignmentDto;
 import com.sirma.staffprojectmanager.repository.PaRepository;
-import org.antlr.v4.runtime.tree.Tree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -103,5 +98,9 @@ public class PaDataLoaderService implements ApplicationRunner {
 		                                                            projectAssignmentRequest.getDateFrom(),
 		                                                            projectAssignmentRequest.getDateTo());
 		return paRepository.save(projectAssignment).getId();
+	}
+
+	public void deleteById(Long id) {
+		paRepository.deleteById(id);
 	}
 }
