@@ -8,6 +8,7 @@ import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.SqlResultSetMapping;
 
 import java.time.LocalDate;
+
 @SqlResultSetMapping(
 	name = "ResultDtoMapping",
 	classes = {
@@ -17,25 +18,49 @@ import java.time.LocalDate;
 				@ColumnResult(name = "emp1", type = Long.class),
 				@ColumnResult(name = "emp2", type = Long.class),
 				@ColumnResult(name = "project_id", type = Long.class),
-				@ColumnResult(name = "overlap_days", type = Integer.class)
+				@ColumnResult(name = "overlap_days", type = Integer.class),
+				@ColumnResult(name = "total_days", type = Integer.class)
 			}
 		)
 	}
 )
 @NamedNativeQuery(
 	name = "findOverlappingData",
-	query = "SELECT " +
-	        "a.employee_id AS emp1, " +
-	        "b.employee_id AS emp2, " +
-	        "a.project_id AS project_id, " +
-	        "(LEAST(COALESCE(a.date_to, CURRENT_DATE), COALESCE(b.date_to, CURRENT_DATE)) " +
-	        " - GREATEST(a.date_from, b.date_from)) AS overlap_days " +
-	        "FROM project_assignment a " +
-	        "INNER JOIN project_assignment b ON a.employee_id < b.employee_id " +
-	        "    AND a.project_id = b.project_id " +
-	        "WHERE " +
-	        "(a.date_from, COALESCE(a.date_to, CURRENT_DATE)) OVERLAPS (b.date_from, COALESCE(b.date_to, CURRENT_DATE)) " +
-	        "AND NOT (a.employee_id = b.employee_id)",
+	query = """
+SELECT\s
+    emp1,
+    emp2,
+    project_durations.project_id,
+    overlap_days,
+    total_days
+FROM\s
+    (
+        SELECT\s
+            a.employee_id AS emp1,
+            b.employee_id AS emp2,
+            a.project_id AS project_id,
+            (LEAST(COALESCE(a.date_to, CURRENT_DATE), COALESCE(b.date_to, CURRENT_DATE)) - GREATEST(a.date_from, b.date_from)) AS overlap_days
+        FROM\s
+            project_assignment a
+        INNER JOIN\s
+            project_assignment b ON a.employee_id < b.employee_id
+            AND a.project_id = b.project_id
+        WHERE\s
+            (a.date_from, COALESCE(a.date_to, CURRENT_DATE)) OVERLAPS (b.date_from, COALESCE(b.date_to, CURRENT_DATE))
+            AND NOT (a.employee_id = b.employee_id)
+    ) AS overlap_data
+LEFT JOIN\s
+    (
+        SELECT\s
+            p.project_id,
+          SUM(GREATEST(COALESCE(date_to, CURRENT_DATE), CURRENT_DATE) - LEAST(date_from, COALESCE(date_to, CURRENT_DATE))) AS total_days
+        FROM\s
+            project_assignment p
+        GROUP BY\s
+            p.project_id
+    ) AS project_durations ON overlap_data.project_id = project_durations.project_id;
+
+""",
 	resultSetMapping = "ResultDtoMapping"
 )
 @Entity

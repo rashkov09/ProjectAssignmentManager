@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Comparator;
-import java.util.List;
 
 @RestController
 public class PaController {
@@ -28,7 +27,7 @@ public class PaController {
 	}
 	@GetMapping("/findMaxProjectOverlap")
 	@Operation(summary = "Returns a pair of employees who have worked together on common projects for the longest period of time.")
-	public ResponseEntity<ResultDto> getListOfOverlappingProjects() {
-		return ResponseEntity.ok(paDataLoaderService.getOverlappingProjects().stream().max(Comparator.comparing(ResultDto::getOverlapDays)).orElse(null));
+	public ResponseEntity<String> getListOfOverlappingProjects() {
+		return ResponseEntity.ok(paDataLoaderService.getOverlappingProjects());
 	}
 }

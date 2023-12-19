@@ -5,16 +5,19 @@ public class ResultDto {
 	private Long emp2;
 	private Long projectId;
   private Integer overlapDays;
+  private Integer totalDays;
 
 	public ResultDto() {
 	}
 
-	public ResultDto(Long emp1, Long emp2, Long projectId, Integer overlapDays) {
+	public ResultDto(Long emp1, Long emp2, Long projectId, Integer overlapDays, Integer totalDays) {
 		this.emp1 = emp1;
 		this.emp2 = emp2;
 		this.projectId = projectId;
 		this.overlapDays = overlapDays;
+		this.totalDays = totalDays;
 	}
+
 
 	public Long getEmp1() {
 		return emp1;
@@ -48,12 +51,19 @@ public class ResultDto {
 		this.overlapDays = overlapDays;
 	}
 
+	public Integer getTotalDays() {
+		return totalDays;
+	}
+
+	public void setTotalDays(Integer totalDays) {
+		this.totalDays = totalDays;
+	}
+
 	@Override
 	public String toString() {
 		return "ResultDto{" +
 		       "emp1=" + emp1 +
 		       ", emp2=" + emp2 +
-		       ", projectId=" + projectId +
 		       ", overlapDays=" + overlapDays +
 		       '}';
 	}

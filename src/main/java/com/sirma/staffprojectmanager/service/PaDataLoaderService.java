@@ -10,6 +10,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -38,7 +39,15 @@ public class PaDataLoaderService implements ApplicationRunner {
 		loadData();
 	}
 
-	public List<ResultDto> getOverlappingProjects() {
-		return paRepository.findOverlappingData();
+	public String getOverlappingProjects() {
+		List<ResultDto> resultDtoList = paRepository.findOverlappingData();
+		StringBuilder builder = new StringBuilder();
+		ResultDto resultDto= resultDtoList.stream().max(Comparator.comparing(ResultDto::getOverlapDays)).orElseThrow();
+		builder.append(resultDto);
+		builder.append(System.lineSeparator());
+		resultDtoList.stream().filter(result -> result.getEmp1().equals(resultDto.getEmp1()) && result.getEmp2().equals(resultDto.getEmp2()) && result.getProjectId().equals(resultDto.getProjectId())).forEach(project ->{
+			builder.append(project.getProjectId()).append(", ").append(project.getTotalDays()).append("\n");
+		});
+		return builder.toString();
 	}
 }
