@@ -1,21 +1,21 @@
 package com.sirma.staffprojectmanager.model.dto;
 
-public class OverlapProjectsDto {
+import org.hibernate.sql.ast.tree.expression.Over;
+
+public class OverlapProjectsDto implements Comparable<OverlapProjectsDto> {
 	private Long emp1;
 	private Long emp2;
 	private Long projectId;
   private Integer overlapDays;
-  private Integer totalDays;
 
-	public OverlapProjectsDto() {
+	public OverlapProjectsDto()  {
 	}
 
-	public OverlapProjectsDto(Long emp1, Long emp2, Long projectId, Integer overlapDays, Integer totalDays) {
+	public OverlapProjectsDto(Long emp1, Long emp2, Long projectId, Integer overlapDays) {
 		this.emp1 = emp1;
 		this.emp2 = emp2;
 		this.projectId = projectId;
 		this.overlapDays = overlapDays;
-		this.totalDays = totalDays;
 	}
 
 
@@ -51,18 +51,37 @@ public class OverlapProjectsDto {
 		this.overlapDays = overlapDays;
 	}
 
-	public Integer getTotalDays() {
-		return totalDays;
-	}
-
-	public void setTotalDays(Integer totalDays) {
-		this.totalDays = totalDays;
-	}
 
 	@Override
 	public String toString() {
 		return "emp1=" + emp1 +
 		       ", emp2=" + emp2 +
 		       ", overlapDays=" + overlapDays;
+	}
+
+	@Override
+	public int hashCode() {
+		return emp1.hashCode()+emp2.hashCode();
+	}
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+
+		OverlapProjectsDto other = (OverlapProjectsDto) obj;
+
+		return emp1.equals(other.emp1) && emp2.equals(other.emp2);
+	}
+
+	@Override
+	public int compareTo(OverlapProjectsDto dto) {
+		return this.emp1.compareTo(dto.emp1) + this.emp2.compareTo(dto.emp2);
 	}
 }
