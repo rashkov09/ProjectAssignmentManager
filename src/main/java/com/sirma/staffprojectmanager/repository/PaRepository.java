@@ -35,4 +35,8 @@ public interface PaRepository extends JpaRepository<ProjectAssignment, Long> {
 	int updateProjectAssignmentById(
 		@Param("paUpdateRequest") ProjectAssignmentUpdateRequest paUpdateRequest, @Param("id") Long id
 	);
+
+	@Modifying
+	@Query(nativeQuery = true, value = "TRUNCATE TABLE project_assignment RESTART IDENTITY")
+	void clearData();
 }

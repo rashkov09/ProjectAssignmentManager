@@ -1,6 +1,8 @@
 package com.sirma.staffprojectmanager.accessor;
 
 import com.sirma.staffprojectmanager.exception.FileMissingException;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextClosedEvent;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

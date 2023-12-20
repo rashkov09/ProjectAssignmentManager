@@ -3,6 +3,7 @@ package com.sirma.staffprojectmanager.service;
 import com.sirma.staffprojectmanager.accessor.FileAccessor;
 import com.sirma.staffprojectmanager.controller.requst.ProjectAssignmentRequest;
 import com.sirma.staffprojectmanager.controller.requst.ProjectAssignmentUpdateRequest;
+import com.sirma.staffprojectmanager.exception.InvalidFileDataException;
 import com.sirma.staffprojectmanager.exception.ProjectAssignmentNotFoundException;
 import com.sirma.staffprojectmanager.mapper.Mapper;
 import com.sirma.staffprojectmanager.mapper.PaMapper;
@@ -13,6 +14,8 @@ import com.sirma.staffprojectmanager.repository.PaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,7 +27,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @Service
-public class PaDataService implements ApplicationRunner {
+public class PaDataService implements ApplicationRunner, ApplicationListener<ContextClosedEvent> {
 
 	private final PaRepository paRepository;
 	private final FileAccessor CSVAccessor;
@@ -43,13 +46,21 @@ public class PaDataService implements ApplicationRunner {
 
 	private void loadData() {
 		if (paRepository.findAll().isEmpty()) {
-			CSVAccessor.read().stream().skip(1).map(projectAssignmentMapper::mapFromString).forEach(paRepository::save);
+			try {
+				CSVAccessor.read().stream().skip(1).map(projectAssignmentMapper::mapFromString).forEach(paRepository::save);
+			} catch (Exception e){
+				throw new InvalidFileDataException(e.getMessage());
+			}
 		}
 	}
 
 	@Override
-	public void run(ApplicationArguments args) throws Exception {
-		loadData();
+	public void run(ApplicationArguments args){
+		try {
+			loadData();
+		} catch (InvalidFileDataException e) {
+			System.out.println("Data processing failed, please reprocess file!");
+		}
 	}
 
 	public String getOverlappingProjects() {
@@ -109,6 +120,23 @@ public class PaDataService implements ApplicationRunner {
 	public void updateProjectAssignment(ProjectAssignmentUpdateRequest projectAssignmentUpdateRequest, Long id) {
 		if (paRepository.updateProjectAssignmentById(projectAssignmentUpdateRequest, id) != 1){
 			throw new ProjectAssignmentNotFoundException(String.valueOf(id));
+		}
+	}
+
+	public String reprocessFile() {
+		paRepository.clearData();
+		loadData();
+		return "Data reloaded successfully!";
+	}
+
+	@Override
+	public void onApplicationEvent(ContextClosedEvent event) {
+		List<ProjectAssignment> projectAssignments = paRepository.findAll();
+		List<String> updatedData = projectAssignments.stream().map(projectAssignmentMapper::mapToString).collect(Collectors.toList());
+		try {
+			CSVAccessor.write(updatedData);
+		}catch (Exception e){
+			System.out.println("Backup failed!" + e.getMessage());
 		}
 	}
 }

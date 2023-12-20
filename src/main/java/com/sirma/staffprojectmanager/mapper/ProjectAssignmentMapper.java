@@ -29,7 +29,15 @@ public class ProjectAssignmentMapper implements Mapper<ProjectAssignment> {
 	}
 
 	@Override
-	public String mapToString(ProjectAssignment input) {
-		return null;
+	public String mapToString(ProjectAssignment pa) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(pa.getEmployeeId())
+			.append(", ")
+			.append(pa.getProjectId())
+			.append(", ")
+			.append(pa.getDateFrom() != null ? pa .getDateFrom().toString() : "NULL")
+			.append(", ")
+			.append(pa.getDateTo() != null ? pa .getDateTo().toString() : "NULL");
+		return builder.toString();
 	}
 }

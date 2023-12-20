@@ -87,4 +87,11 @@ public class PaController {
 	public ResponseEntity<String> getListOfOverlappingProjects() {
 		return ResponseEntity.ok(paDataService.getOverlappingProjects());
 	}
+
+	@GetMapping("/reprocessDataFromFile")
+	@Operation(
+		summary = "Reprocesses the file and saves to database")
+	public ResponseEntity<String> reprocessFile() {
+		return ResponseEntity.ok(paDataService.reprocessFile());
+	}
 }
