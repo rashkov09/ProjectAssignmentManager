@@ -5,8 +5,7 @@ import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
 
-public class ProjectAssignmentRequest {
-
+public class ProjectAssignmentUpdateRequest {
 	@NotNull
 	private Long employeeId;
 	@NotNull
@@ -19,14 +18,7 @@ public class ProjectAssignmentRequest {
 	private LocalDate dateFrom;
 	private LocalDate dateTo;
 
-	public ProjectAssignmentRequest() {
-	}
-
-	public ProjectAssignmentRequest(Long employeeId, Long projectId, LocalDate dateFrom, LocalDate dateTo) {
-		this.employeeId = employeeId;
-		this.projectId = projectId;
-		this.dateFrom = dateFrom;
-		this.dateTo = dateTo;
+	public ProjectAssignmentUpdateRequest() {
 	}
 
 	public Long getEmployeeId() {
@@ -60,4 +52,5 @@ public class ProjectAssignmentRequest {
 	public void setDateTo(LocalDate dateTo) {
 		this.dateTo = dateTo;
 	}
+
 }

@@ -2,6 +2,8 @@ package com.sirma.staffprojectmanager.service;
 
 import com.sirma.staffprojectmanager.accessor.FileAccessor;
 import com.sirma.staffprojectmanager.controller.requst.ProjectAssignmentRequest;
+import com.sirma.staffprojectmanager.controller.requst.ProjectAssignmentUpdateRequest;
+import com.sirma.staffprojectmanager.exception.ProjectAssignmentNotFoundException;
 import com.sirma.staffprojectmanager.mapper.Mapper;
 import com.sirma.staffprojectmanager.mapper.PaMapper;
 import com.sirma.staffprojectmanager.model.ProjectAssignment;
@@ -102,5 +104,11 @@ public class PaDataLoaderService implements ApplicationRunner {
 
 	public void deleteById(Long id) {
 		paRepository.deleteById(id);
+	}
+
+	public void updateProjectAssignment(ProjectAssignmentUpdateRequest projectAssignmentUpdateRequest, Long id) {
+		if (paRepository.updateProjectAssignmentById(projectAssignmentUpdateRequest, id) != 1){
+			throw new ProjectAssignmentNotFoundException(String.valueOf(id));
+		}
 	}
 }

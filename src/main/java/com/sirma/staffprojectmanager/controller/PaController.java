@@ -1,19 +1,20 @@
 package com.sirma.staffprojectmanager.controller;
 
 import com.sirma.staffprojectmanager.controller.requst.ProjectAssignmentRequest;
+import com.sirma.staffprojectmanager.controller.requst.ProjectAssignmentUpdateRequest;
 import com.sirma.staffprojectmanager.model.ProjectAssignment;
 import com.sirma.staffprojectmanager.model.dto.ProjectAssignmentDto;
 import com.sirma.staffprojectmanager.service.PaDataLoaderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,10 +67,18 @@ public class PaController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PutMapping("pa/{id}")
+	@Operation(summary = "Update project assignment information.")
+	public ResponseEntity<Void> updateProjectAssignment(
+		@PathVariable Long id, @RequestBody @Valid ProjectAssignmentUpdateRequest projectAssignmentUpdateRequest) {
+		paDataLoaderService.updateProjectAssignment(projectAssignmentUpdateRequest, id);
+		return ResponseEntity.noContent().build();
+	}
+
 	@GetMapping("/findMaxProjectOverlap")
 	@Operation(
 		summary = "Returns a pair of employees who have worked together on common projects for the longest period of " +
-		          "time and the projects with the overlap time for each one.")
+		          "time and the projects with the overlap time for each one. ")
 	public ResponseEntity<String> getListOfOverlappingProjects() {
 		return ResponseEntity.ok(paDataLoaderService.getOverlappingProjects());
 	}
