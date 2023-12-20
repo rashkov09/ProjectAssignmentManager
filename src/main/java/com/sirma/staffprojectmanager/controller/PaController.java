@@ -5,7 +5,7 @@ import com.sirma.staffprojectmanager.controller.requst.ProjectAssignmentUpdateRe
 import com.sirma.staffprojectmanager.mapper.Mapper;
 import com.sirma.staffprojectmanager.model.ProjectAssignment;
 import com.sirma.staffprojectmanager.model.dto.ProjectAssignmentDto;
-import com.sirma.staffprojectmanager.service.PaDataLoaderService;
+import com.sirma.staffprojectmanager.service.PaDataService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -29,12 +29,12 @@ import java.util.List;
 @Tag(name = "Project Assignment Controller", description = "Provides data for project assignments")
 public class PaController {
 
-	private final PaDataLoaderService paDataLoaderService;
+	private final PaDataService paDataService;
 	private final Mapper<LocalDate> dateMapper;
 
 	@Autowired
-	public PaController(PaDataLoaderService paDataLoaderService, Mapper<LocalDate> dateMapper) {
-		this.paDataLoaderService = paDataLoaderService;
+	public PaController(PaDataService paDataService, Mapper<LocalDate> dateMapper) {
+		this.paDataService = paDataService;
 		this.dateMapper = dateMapper;
 	}
 
@@ -49,14 +49,14 @@ public class PaController {
 		LocalDate formattedDateFrom  = dateMapper.mapFromString(dateFrom);
 		LocalDate formattedDateTo = dateMapper.mapFromString(dateTo);
 		return ResponseEntity.ok(
-			paDataLoaderService.readFilteredProjectAssignments(employeeId, projectId, formattedDateFrom, formattedDateTo));
+			paDataService.readFilteredProjectAssignments(employeeId, projectId, formattedDateFrom, formattedDateTo));
 	}
 
 	@PostMapping("/pa")
 	@Operation(summary = "Create a project assignment.")
 	public ResponseEntity<Void> createProjectAssignment(
 		@RequestBody @Valid ProjectAssignmentRequest projectAssignmentRequest) {
-		Long id = paDataLoaderService.createProjectAssigment(projectAssignmentRequest);
+		Long id = paDataService.createProjectAssigment(projectAssignmentRequest);
 
 		URI location = UriComponentsBuilder.fromUriString("/pa/{id}")
 		                                   .buildAndExpand(id)
@@ -68,7 +68,7 @@ public class PaController {
 	@DeleteMapping("/pa/{id}")
 	@Operation(summary = "Delete a record for project assignment by ID")
 	public ResponseEntity<ProjectAssignment> deleteEmployeeById(@PathVariable Long id) {
-		paDataLoaderService.deleteById(id);
+		paDataService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -76,7 +76,7 @@ public class PaController {
 	@Operation(summary = "Update project assignment information.")
 	public ResponseEntity<Void> updateProjectAssignment(
 		@PathVariable Long id, @RequestBody @Valid ProjectAssignmentUpdateRequest projectAssignmentUpdateRequest) {
-		paDataLoaderService.updateProjectAssignment(projectAssignmentUpdateRequest, id);
+		paDataService.updateProjectAssignment(projectAssignmentUpdateRequest, id);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -85,6 +85,6 @@ public class PaController {
 		summary = "Returns a pair of employees who have worked together on common projects for the longest period of " +
 		          "time and the projects with the overlap time for each one. ")
 	public ResponseEntity<String> getListOfOverlappingProjects() {
-		return ResponseEntity.ok(paDataLoaderService.getOverlappingProjects());
+		return ResponseEntity.ok(paDataService.getOverlappingProjects());
 	}
 }

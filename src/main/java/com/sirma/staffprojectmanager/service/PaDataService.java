@@ -24,7 +24,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @Service
-public class PaDataLoaderService implements ApplicationRunner {
+public class PaDataService implements ApplicationRunner {
 
 	private final PaRepository paRepository;
 	private final FileAccessor CSVAccessor;
@@ -32,7 +32,7 @@ public class PaDataLoaderService implements ApplicationRunner {
 	private final Mapper<ProjectAssignment> projectAssignmentMapper;
 
 	@Autowired
-	public PaDataLoaderService(
+	public PaDataService(
 		PaRepository paRepository, FileAccessor csvAccessor,
 		PaMapper paMapper, Mapper<ProjectAssignment> projectAssignmentMapper) {
 		this.paRepository = paRepository;
@@ -43,7 +43,7 @@ public class PaDataLoaderService implements ApplicationRunner {
 
 	private void loadData() {
 		if (paRepository.findAll().isEmpty()) {
-			CSVAccessor.read().stream().map(projectAssignmentMapper::mapFromString).forEach(paRepository::save);
+			CSVAccessor.read().stream().skip(1).map(projectAssignmentMapper::mapFromString).forEach(paRepository::save);
 		}
 	}
 
