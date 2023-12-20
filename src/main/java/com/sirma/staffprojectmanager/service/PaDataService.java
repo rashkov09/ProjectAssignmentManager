@@ -34,6 +34,8 @@ public class PaDataService implements ApplicationRunner, ApplicationListener<Con
 	private final PaMapper paMapper;
 	private final Mapper<ProjectAssignment> projectAssignmentMapper;
 
+	private final static String HEADER = "EMPLOYEE_ID, PROJECT_ID, DATE_FROM, DATE_TO";
+
 	@Autowired
 	public PaDataService(
 		PaRepository paRepository, FileAccessor csvAccessor,
@@ -133,6 +135,7 @@ public class PaDataService implements ApplicationRunner, ApplicationListener<Con
 	public void onApplicationEvent(ContextClosedEvent event) {
 		List<ProjectAssignment> projectAssignments = paRepository.findAll();
 		List<String> updatedData = projectAssignments.stream().map(projectAssignmentMapper::mapToString).collect(Collectors.toList());
+		updatedData.add(0, HEADER);
 		try {
 			CSVAccessor.write(updatedData);
 		}catch (Exception e){

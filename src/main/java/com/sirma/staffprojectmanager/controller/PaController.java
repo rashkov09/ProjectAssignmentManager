@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,11 +33,13 @@ public class PaController {
 
 	private final PaDataService paDataService;
 	private final Mapper<LocalDate> dateMapper;
+	private final ApplicationContext applicationContext;
 
 	@Autowired
-	public PaController(PaDataService paDataService, Mapper<LocalDate> dateMapper) {
+	public PaController(PaDataService paDataService, Mapper<LocalDate> dateMapper, ApplicationContext applicationContext) {
 		this.paDataService = paDataService;
 		this.dateMapper = dateMapper;
+		this.applicationContext = applicationContext;
 	}
 
 	@GetMapping("/pa")
@@ -46,7 +50,7 @@ public class PaController {
 		@RequestParam(value = "dateFrom", required = false) String dateFrom,
 		@RequestParam(value = "dateTo", required = false) String dateTo
 	) {
-		LocalDate formattedDateFrom  = dateMapper.mapFromString(dateFrom);
+		LocalDate formattedDateFrom = dateMapper.mapFromString(dateFrom);
 		LocalDate formattedDateTo = dateMapper.mapFromString(dateTo);
 		return ResponseEntity.ok(
 			paDataService.readFilteredProjectAssignments(employeeId, projectId, formattedDateFrom, formattedDateTo));
@@ -93,5 +97,12 @@ public class PaController {
 		summary = "Reprocesses the file and saves to database")
 	public ResponseEntity<String> reprocessFile() {
 		return ResponseEntity.ok(paDataService.reprocessFile());
+	}
+
+	@PostMapping("/backupAndExit")
+	@Operation(
+		summary = "Stops the application and saves data from db to file")
+	public void backupAndExit() {
+		SpringApplication.exit(applicationContext);
 	}
 }
