@@ -2,6 +2,7 @@ package com.sirma.staffprojectmanager.controller;
 
 import com.sirma.staffprojectmanager.controller.requst.ProjectAssignmentRequest;
 import com.sirma.staffprojectmanager.controller.requst.ProjectAssignmentUpdateRequest;
+import com.sirma.staffprojectmanager.mapper.Mapper;
 import com.sirma.staffprojectmanager.model.ProjectAssignment;
 import com.sirma.staffprojectmanager.model.dto.ProjectAssignmentDto;
 import com.sirma.staffprojectmanager.service.PaDataLoaderService;
@@ -29,10 +30,12 @@ import java.util.List;
 public class PaController {
 
 	private final PaDataLoaderService paDataLoaderService;
+	private final Mapper<LocalDate> dateMapper;
 
 	@Autowired
-	public PaController(PaDataLoaderService paDataLoaderService) {
+	public PaController(PaDataLoaderService paDataLoaderService, Mapper<LocalDate> dateMapper) {
 		this.paDataLoaderService = paDataLoaderService;
+		this.dateMapper = dateMapper;
 	}
 
 	@GetMapping("/pa")
@@ -40,11 +43,13 @@ public class PaController {
 	public ResponseEntity<List<ProjectAssignmentDto>> getAllAssignments(
 		@RequestParam(value = "employeeId", required = false) Long employeeId,
 		@RequestParam(value = "projectId", required = false) Long projectId,
-		@RequestParam(value = "dateFrom", required = false) LocalDate dateFrom,
-		@RequestParam(value = "dateTo", required = false) LocalDate dateTo
+		@RequestParam(value = "dateFrom", required = false) String dateFrom,
+		@RequestParam(value = "dateTo", required = false) String dateTo
 	) {
+		LocalDate formattedDateFrom  = dateMapper.mapFromString(dateFrom);
+		LocalDate formattedDateTo = dateMapper.mapFromString(dateTo);
 		return ResponseEntity.ok(
-			paDataLoaderService.readFilteredProjectAssignments(employeeId, projectId, dateFrom, dateTo));
+			paDataLoaderService.readFilteredProjectAssignments(employeeId, projectId, formattedDateFrom, formattedDateTo));
 	}
 
 	@PostMapping("/pa")

@@ -24,6 +24,9 @@ public class DateMapper implements Mapper<LocalDate> {
 	 */
 	@Override
 	public LocalDate mapFromString(String input) {
+		if (input == null){
+			return null;
+		}
 		LocalDate result = null;
 		if (input.matches(YEAR_FIRST_SLASH_PATTERN)){
 			String[] data = input.split("/");
