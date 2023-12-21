@@ -94,14 +94,14 @@ public class PaController {
 
 	@GetMapping("/reprocessDataFromFile")
 	@Operation(
-		summary = "Reprocesses the file and saves to database")
+		summary = "Reprocesses the file and saves to database. WARNING: This will delete all information from database and will load information from file!")
 	public ResponseEntity<String> reprocessFile() {
 		return ResponseEntity.ok(paDataService.reprocessFile());
 	}
 
 	@PostMapping("/backupAndExit")
 	@Operation(
-		summary = "Stops the application and saves data from db to file")
+		summary = "Stops the application and saves data from db to file. WARNING: This will stop the application and will end in network error")
 	public void backupAndExit() {
 		SpringApplication.exit(applicationContext);
 	}
