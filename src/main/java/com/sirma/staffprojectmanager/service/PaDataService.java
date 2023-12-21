@@ -3,6 +3,8 @@ package com.sirma.staffprojectmanager.service;
 import com.sirma.staffprojectmanager.accessor.FileAccessor;
 import com.sirma.staffprojectmanager.controller.requst.ProjectAssignmentRequest;
 import com.sirma.staffprojectmanager.controller.requst.ProjectAssignmentUpdateRequest;
+import com.sirma.staffprojectmanager.exception.FileMissingException;
+import com.sirma.staffprojectmanager.exception.InvalidDateFormatException;
 import com.sirma.staffprojectmanager.exception.InvalidFileDataException;
 import com.sirma.staffprojectmanager.exception.ProjectAssignmentNotFoundException;
 import com.sirma.staffprojectmanager.mapper.Mapper;
@@ -28,15 +30,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class PaDataService implements ApplicationRunner, ApplicationListener<ContextClosedEvent> {
+
 	private final static String DEFAULT_FILE_PATH = "src/main/resources/input/";
 	private final static String INPUT_CSV_FILE_PATH = "src/main/resources/input/data.csv";
-
+	private final static String HEADER = "EMPLOYEE_ID, PROJECT_ID, DATE_FROM, DATE_TO";
 	private final PaRepository paRepository;
 	private final FileAccessor CSVAccessor;
 	private final PaMapper paMapper;
 	private final Mapper<ProjectAssignment> projectAssignmentMapper;
-
-	private final static String HEADER = "EMPLOYEE_ID, PROJECT_ID, DATE_FROM, DATE_TO";
 
 	@Autowired
 	public PaDataService(
@@ -51,15 +52,16 @@ public class PaDataService implements ApplicationRunner, ApplicationListener<Con
 	private void loadData(String filePath) {
 		if (paRepository.findAll().isEmpty()) {
 			try {
-				CSVAccessor.read(filePath).stream().skip(1).map(projectAssignmentMapper::mapFromString).forEach(paRepository::save);
-			} catch (Exception e){
+				CSVAccessor.read(filePath).stream().skip(1).map(projectAssignmentMapper::mapFromString)
+				           .forEach(paRepository::save);
+			} catch (NumberFormatException | InvalidDateFormatException e) {
 				throw new InvalidFileDataException(e.getMessage());
 			}
 		}
 	}
 
 	@Override
-	public void run(ApplicationArguments args){
+	public void run(ApplicationArguments args) {
 		try {
 			loadData(INPUT_CSV_FILE_PATH);
 		} catch (InvalidFileDataException e) {
@@ -122,25 +124,32 @@ public class PaDataService implements ApplicationRunner, ApplicationListener<Con
 	}
 
 	public void updateProjectAssignment(ProjectAssignmentUpdateRequest projectAssignmentUpdateRequest, Long id) {
-		if (paRepository.updateProjectAssignmentById(projectAssignmentUpdateRequest, id) != 1){
+		if (paRepository.updateProjectAssignmentById(projectAssignmentUpdateRequest, id) != 1) {
 			throw new ProjectAssignmentNotFoundException(String.valueOf(id));
 		}
 	}
 
 	public String reprocessFile(String fileName) {
-		paRepository.clearData();
-		loadData(DEFAULT_FILE_PATH+fileName);
+		try {
+			paRepository.clearData();
+			loadData(DEFAULT_FILE_PATH + fileName);
+		} catch (InvalidFileDataException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new FileMissingException(DEFAULT_FILE_PATH + fileName);
+		}
 		return "Data reloaded successfully!";
 	}
 
 	@Override
 	public void onApplicationEvent(ContextClosedEvent event) {
 		List<ProjectAssignment> projectAssignments = paRepository.findAll();
-		List<String> updatedData = projectAssignments.stream().map(projectAssignmentMapper::mapToString).collect(Collectors.toList());
+		List<String> updatedData =
+			projectAssignments.stream().map(projectAssignmentMapper::mapToString).collect(Collectors.toList());
 		updatedData.add(0, HEADER);
 		try {
 			CSVAccessor.write(updatedData);
-		}catch (Exception e){
+		} catch (Exception e) {
 			System.out.println("Backup failed!" + e.getMessage());
 		}
 	}

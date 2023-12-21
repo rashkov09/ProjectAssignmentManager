@@ -1,5 +1,6 @@
 package com.sirma.staffprojectmanager.mapper;
 
+import com.sirma.staffprojectmanager.exception.InvalidDateFormatException;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
@@ -26,10 +27,10 @@ public class DateMapper implements Mapper<LocalDate> {
 	 */
 	@Override
 	public LocalDate mapFromString(String input) {
-		if (input == null){
+		if (input == null || input.equalsIgnoreCase("null")){
 			return null;
 		}
-		LocalDate result = null;
+		LocalDate result;
 		if (input.matches(YEAR_FIRST_SLASH_PATTERN)){
 			String[] data = input.split("/");
 			result= LocalDate.of(Integer.parseInt(data[0]),Integer.parseInt(data[1]),Integer.parseInt(data[2]));
@@ -54,6 +55,8 @@ public class DateMapper implements Mapper<LocalDate> {
 			int year = Integer.parseInt(data[2]);
 			Integer month = Months.valueOf(data[1].toUpperCase()).getMonth();
 			result = LocalDate.of(year,month,day);
+		} else {
+			throw new InvalidDateFormatException(input);
 		}
 		return result;
 	}
