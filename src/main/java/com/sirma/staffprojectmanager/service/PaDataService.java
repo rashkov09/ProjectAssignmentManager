@@ -34,6 +34,7 @@ public class PaDataService implements ApplicationRunner, ApplicationListener<Con
 	private final static String DEFAULT_FILE_PATH = "src/main/resources/input/";
 	private final static String INPUT_CSV_FILE_PATH = "src/main/resources/input/data.csv";
 	private final static String HEADER = "EMPLOYEE_ID, PROJECT_ID, DATE_FROM, DATE_TO";
+	private final static String NO_ENTRIES_FOUND_MESSAGE = "No entries found!";
 	private final PaRepository paRepository;
 	private final FileAccessor CSVAccessor;
 	private final PaMapper paMapper;
@@ -71,6 +72,9 @@ public class PaDataService implements ApplicationRunner, ApplicationListener<Con
 
 	public String getOverlappingProjects() {
 		List<OverlapProjectsDto> overlapProjectsDtoList = paRepository.findOverlappingData();
+		if (overlapProjectsDtoList.isEmpty()){
+			return NO_ENTRIES_FOUND_MESSAGE;
+		}
 		TreeMap<OverlapProjectsDto, Integer> testAccum = new TreeMap<>();
 		for (OverlapProjectsDto dto : overlapProjectsDtoList) {
 			if (!testAccum.containsKey(dto)) {
@@ -136,7 +140,8 @@ public class PaDataService implements ApplicationRunner, ApplicationListener<Con
 		} catch (InvalidFileDataException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new FileMissingException(DEFAULT_FILE_PATH + fileName);
+			loadData(DEFAULT_FILE_PATH+"dataBackup.csv");
+			throw new FileMissingException(DEFAULT_FILE_PATH + fileName+" -> Restored data from backup file!");
 		}
 		return "Data reloaded successfully!";
 	}
