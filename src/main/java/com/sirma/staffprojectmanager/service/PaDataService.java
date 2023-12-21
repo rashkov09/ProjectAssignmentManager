@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class PaDataService implements ApplicationRunner, ApplicationListener<ContextClosedEvent> {
+	private final static String DEFAULT_FILE_PATH = "src/main/resources/input/";
+	private final static String INPUT_CSV_FILE_PATH = "src/main/resources/input/data.csv";
 
 	private final PaRepository paRepository;
 	private final FileAccessor CSVAccessor;
@@ -46,10 +48,10 @@ public class PaDataService implements ApplicationRunner, ApplicationListener<Con
 		this.projectAssignmentMapper = projectAssignmentMapper;
 	}
 
-	private void loadData() {
+	private void loadData(String filePath) {
 		if (paRepository.findAll().isEmpty()) {
 			try {
-				CSVAccessor.read().stream().skip(1).map(projectAssignmentMapper::mapFromString).forEach(paRepository::save);
+				CSVAccessor.read(filePath).stream().skip(1).map(projectAssignmentMapper::mapFromString).forEach(paRepository::save);
 			} catch (Exception e){
 				throw new InvalidFileDataException(e.getMessage());
 			}
@@ -59,7 +61,7 @@ public class PaDataService implements ApplicationRunner, ApplicationListener<Con
 	@Override
 	public void run(ApplicationArguments args){
 		try {
-			loadData();
+			loadData(INPUT_CSV_FILE_PATH);
 		} catch (InvalidFileDataException e) {
 			System.out.println("Data processing failed, please reprocess file!");
 		}
@@ -125,9 +127,9 @@ public class PaDataService implements ApplicationRunner, ApplicationListener<Con
 		}
 	}
 
-	public String reprocessFile() {
+	public String reprocessFile(String fileName) {
 		paRepository.clearData();
-		loadData();
+		loadData(DEFAULT_FILE_PATH+fileName);
 		return "Data reloaded successfully!";
 	}
 

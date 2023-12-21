@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface FileAccessor {
 
-	List<String> read();
+	List<String> read(String filePath);
 
 	void write(List<String> lines) throws IOException;
 

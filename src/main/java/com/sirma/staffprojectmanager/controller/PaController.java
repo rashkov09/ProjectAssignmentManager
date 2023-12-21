@@ -95,8 +95,10 @@ public class PaController {
 	@GetMapping("/reprocessDataFromFile")
 	@Operation(
 		summary = "Reprocesses the file and saves to database. WARNING: This will delete all information from database and will load information from file!")
-	public ResponseEntity<String> reprocessFile() {
-		return ResponseEntity.ok(paDataService.reprocessFile());
+	public ResponseEntity<String> reprocessFile(
+		@RequestParam(value = "fileName") String fileName
+	) {
+		return ResponseEntity.ok(paDataService.reprocessFile(fileName));
 	}
 
 	@PostMapping("/backupAndExit")
