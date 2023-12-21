@@ -1,5 +1,6 @@
 package com.sirma.staffprojectmanager.mapper;
 
+import com.sirma.staffprojectmanager.exception.InvalidDateFormatException;
 import com.sirma.staffprojectmanager.model.ProjectAssignment;
 
 import java.time.LocalDate;
@@ -18,6 +19,9 @@ public class ProjectAssignmentMapper implements Mapper<ProjectAssignment> {
 		Long employeeId = Long.parseLong(data[0]);
 		Long projectId = Long.parseLong(data[1]);
 		LocalDate dateFrom = dateMapper.mapFromString(data[2]);
+		if(dateFrom == null) {
+			throw  new InvalidDateFormatException("Date from cannot be null");
+		}
 		LocalDate dateTo = dateMapper.mapFromString(data[3]);
 		ProjectAssignment projectAssignment = new ProjectAssignment();
 		projectAssignment.setEmployeeId(employeeId);
