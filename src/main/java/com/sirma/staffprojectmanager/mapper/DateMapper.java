@@ -1,18 +1,17 @@
 package com.sirma.staffprojectmanager.mapper;
 
 import com.sirma.staffprojectmanager.exception.InvalidDateFormatException;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 public class DateMapper implements Mapper<LocalDate> {
-	private final static String YEAR_FIRST_SLASH_PATTERN = "^([0-9]{4})\\/([0][1-9]|[1][0-2])\\/([0-2][0-9]|[3][0-1])$";
-	private final static String YEAR_LAST_SLASH_PATTERN = "^([0-2][0-9]|[3][0-1])\\/([0][1-9]|[1][0-2])\\/([0-9]{4})$";
-	private final static String YEAR_LAST_MONTH_FIRST_SLASH_PATTERN = "^([0][1-9]|[1][0-2])\\/([0-2][0-9]|[3][0-1])\\/(\\d{4})$";
+	private final static String YEAR_FIRST_SLASH_PATTERN = "^([0-9]{4})/(0[1-9]|1[0-2])/([0-2][0-9]|3[0-1])$";
+	private final static String YEAR_LAST_SLASH_PATTERN = "^([0-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([0-9]{4})$";
+	private final static String YEAR_LAST_MONTH_FIRST_SLASH_PATTERN = "^(0[1-9]|1[0-2])/([0-2][0-9]|3[0-1])/(\\d{4})$";
 
-	private final static String YEAR_FIRST_DASH_PATTERN = "^([0-9]{4})-([0][1-9]|[1][0-2])-([0-2][0-9]|[3][0-1])$";
-	private final static String YEAR_LAST_DASH_PATTERN = "^([0-2][0-9]|[3][0-1])-([0][1-9]|[1][0-2])-([0-9]{4})$";
-	private final static String YEAR_LAST_MONTH_FIRST_DASH_PATTERN = "^([0][1-9]|[1][0-2])-([0-2][0-9]|[3][0-1])-(\\d{4})$";
-	private final static String DAY_MONTH_IN_WORDS_YEAR_PATTERN = "^(?i)([0][1-9]|[1-2][0-9]|[3][0-1]) (january|february|march|april|may|june|july|september|october|november|december) ([0-9]{4})$";
+	private final static String YEAR_FIRST_DASH_PATTERN = "^([0-9]{4})-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])$";
+	private final static String YEAR_LAST_DASH_PATTERN = "^([0-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([0-9]{4})$";
+	private final static String YEAR_LAST_MONTH_FIRST_DASH_PATTERN = "^(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])-(\\d{4})$";
+	private final static String DAY_MONTH_IN_WORDS_YEAR_PATTERN = "^(?i)(0[1-9]|[1-2][0-9]|3[0-1]) (january|february|march|april|may|june|july|august|september|october|november|december) ([0-9]{4})$";
 
 	/**
 	 * This class will support the following formats:
