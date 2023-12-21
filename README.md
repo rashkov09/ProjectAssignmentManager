@@ -16,7 +16,7 @@ In addition of the above the application has functionalities to add, remove, upd
 
 IMPORTANT: The application is blocked from reading the file if there is information in the database and that is why there is an endpoint 
 to reprocess the file and replace the information in the database. On other hand if you add/edit/remove information through the API and stop the program,
-it will be added/updated/removed in the file.
+it will be added/updated/removed in the src/main/resources/input/dataBackup.csv file.
 
 ## Installation
 
@@ -36,6 +36,8 @@ Default config:
 >spring.datasource.username=postgres
 >
 > spring.datasource.password=admin
+
+The file path for the main file is src/main/resources/input/data.csv
 
 ## Usage
 You can run the program after successful installation and configuration. <br>
